@@ -1,0 +1,2 @@
+# rabbitmq
+mq rabbit-mq
