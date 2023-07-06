@@ -1,5 +1,6 @@
 package com.image.rabbitmq.consumer;
 
+import com.image.rabbitmq.util.RabbitMqUtil;
 import com.rabbitmq.client.*;
 
 /**
@@ -15,14 +16,8 @@ public class Consumer {
 
     //接收消息
     public static void main(String[] args) throws Exception {
-        //创建工厂
-        ConnectionFactory factory = new ConnectionFactory();
-        factory.setHost("1.15.98.60");
-        factory.setUsername("admin");
-        factory.setPassword("123");
-        //创建信道
-        Connection connection = factory.newConnection();
-        Channel channel = connection.createChannel();
+
+        Channel channel = RabbitMqUtil.getChannel();
 
         //声明 消费者未成功消费的回调
         //(String consumerTag, Delivery message)
