@@ -33,6 +33,8 @@ public class SecondHandTaskWorker {
             System.out.println("手动消费中断");
         };
 
+        int prefetchCount = 1;
+        channel.basicQos(prefetchCount);
         boolean autoAck = false;
         channel.basicConsume(task_queue, autoAck, deliverCallback, cancelCallback);
     }
