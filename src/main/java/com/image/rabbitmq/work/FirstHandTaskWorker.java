@@ -34,9 +34,12 @@ public class FirstHandTaskWorker {
             System.out.println("手动消费中断");
         };
 
-        //设置不公平分发
+        //手动确认
         boolean autoAck = false;
-        int prefetchCount = 1;
+        //设置不公平分发
+//        int prefetchCount = 1;
+        //设置预取值(可以堆积多少条) 可以收到多少条 一条确认之后在进来
+        int prefetchCount = 2;
         channel.basicQos(prefetchCount);
         channel.basicConsume(task_queue, autoAck, deliverCallback, cancelCallback);
     }

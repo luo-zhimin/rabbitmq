@@ -21,6 +21,7 @@ public class SecondHandTaskWorker {
         Channel channel = RabbitMqUtil.getChannel();
         System.out.println("c2等待消息处理时间较长....");
         DeliverCallback deliverCallback = (consumerTag, message) -> {
+            //消费能力比较查 沉睡30s
             SleepUtils.sleep(30);
             System.out.println("手动处理（消费者）消费消息：" + new String(message.getBody()));
             //应答
@@ -33,7 +34,9 @@ public class SecondHandTaskWorker {
             System.out.println("手动消费中断");
         };
 
-        int prefetchCount = 1;
+//        int prefetchCount = 1;
+        //设置预取值
+        int prefetchCount = 5;
         channel.basicQos(prefetchCount);
         boolean autoAck = false;
         channel.basicConsume(task_queue, autoAck, deliverCallback, cancelCallback);
