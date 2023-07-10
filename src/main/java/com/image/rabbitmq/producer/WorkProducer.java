@@ -18,7 +18,7 @@ public class WorkProducer {
 
     //准备发送大量的消息
     public static void main(String[] args) throws Exception {
-        Channel channel = RabbitMqUtil.getChannel();
+        Channel channel = RabbitMqUtil.getChannel(false);
         //队列的声明
         channel.queueDeclare(queue_name, true, false, false, null);
         //发送消息 控制台输入

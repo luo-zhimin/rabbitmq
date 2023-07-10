@@ -20,7 +20,7 @@ public class Producer {
 
         //channel
         //获取信道
-        Channel channel = RabbitMqUtil.getChannel();
+        Channel channel = RabbitMqUtil.getChannel(false);
         //队列
         //String queue 队列名称,
         //boolean durable 队列里面的消息是否持久化（磁盘），默认情况消息存储在内存中

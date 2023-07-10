@@ -17,7 +17,7 @@ public class FirstWork {
     private static final String queue_name = "hello";
 
     public static void main(String[] args) throws Exception {
-        Channel channel = RabbitMqUtil.getChannel();
+        Channel channel = RabbitMqUtil.getChannel(false);
 
         DeliverCallback deliverCallback = (consumerTag, message) -> {
             System.out.println("接收到的消息：" + new String(message.getBody()));

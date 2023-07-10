@@ -18,7 +18,7 @@ public class SecondHandTaskWorker {
 
     public static void main(String[] args) throws Exception {
         //接收消息
-        Channel channel = RabbitMqUtil.getChannel();
+        Channel channel = RabbitMqUtil.getChannel(false);
         System.out.println("c2等待消息处理时间较长....");
         DeliverCallback deliverCallback = (consumerTag, message) -> {
             //消费能力比较查 沉睡30s

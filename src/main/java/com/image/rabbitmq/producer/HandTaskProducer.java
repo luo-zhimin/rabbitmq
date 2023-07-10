@@ -20,7 +20,7 @@ public class HandTaskProducer {
     private static final String task_queue = "ack_queue";
 
     public static void main(String[] args) throws Exception {
-        Channel channel = RabbitMqUtil.getChannel();
+        Channel channel = RabbitMqUtil.getChannel(false);
 
         /*
             inequivalent arg 'durable' for queue 'ack_queue' in vhost '/': received 'true' but current is 'false', class-id=50, method-id=10)

@@ -19,7 +19,7 @@ public class FirstHandTaskWorker {
 
     public static void main(String[] args) throws Exception {
         //接收消息
-        Channel channel = RabbitMqUtil.getChannel();
+        Channel channel = RabbitMqUtil.getChannel(false);
         System.out.println("c1等待消息处理时间较短....");
         DeliverCallback deliverCallback = (consumerTag, message) -> {
             SleepUtils.sleep(1);

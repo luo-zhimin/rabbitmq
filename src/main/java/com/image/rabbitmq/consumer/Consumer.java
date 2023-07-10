@@ -17,7 +17,7 @@ public class Consumer {
     //接收消息
     public static void main(String[] args) throws Exception {
 
-        Channel channel = RabbitMqUtil.getChannel();
+        Channel channel = RabbitMqUtil.getChannel(false);
 
         //声明 消费者未成功消费的回调
         //(String consumerTag, Delivery message)

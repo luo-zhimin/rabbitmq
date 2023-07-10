@@ -13,8 +13,14 @@ import lombok.SneakyThrows;
  */
 public class RabbitMqUtil {
 
+    /**
+     * 获取mq的信道
+     *
+     * @param confirm 是否开启发布确认
+     * @return 信道
+     */
     @SneakyThrows
-    public static Channel getChannel() {
+    public static Channel getChannel(Boolean confirm) {
         //创建工厂
         ConnectionFactory factory = new ConnectionFactory();
         factory.setHost("1.15.98.60");
@@ -22,6 +28,11 @@ public class RabbitMqUtil {
         factory.setPassword("123");
         //创建链接
         Connection connection = factory.newConnection();
-        return connection.createChannel();
+        Channel channel = connection.createChannel();
+        if (confirm) {
+            //开始发布确认模式
+            channel.confirmSelect();
+        }
+        return channel;
     }
 }
