@@ -1,12 +1,8 @@
-package com.image.rabbitmq.consumer.exchange;
+package com.image.rabbitmq.consumer.exchange.fanout;
 
 import com.image.rabbitmq.util.RabbitMqUtil;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.DeliverCallback;
-import org.apache.commons.io.FileUtils;
-
-import java.io.File;
-import java.nio.charset.StandardCharsets;
 
 /**
  * Created by IntelliJ IDEA.
@@ -15,11 +11,9 @@ import java.nio.charset.StandardCharsets;
  * @Author : 镜像
  * @create 2023/7/10 21:59
  */
-public class FanoutReceiveLogSecond {
+public class FanoutReceiveLogFirst {
 
     private final static String exchange_name = "logs";
-
-    private final static String file_path = "/Users/luozhimin/Desktop/File/daily/";
 
     public static void main(String[] args) throws Exception {
         Channel channel = RabbitMqUtil.getChannel(false);
@@ -30,18 +24,14 @@ public class FanoutReceiveLogSecond {
         String queue = channel.queueDeclare().getQueue();
         //绑定交换机和队列
         channel.queueBind(queue, exchange_name, "");
-        System.out.println(FanoutReceiveLogSecond.class.getName() + "等待接收消息，把接收到的消息打印到屏幕.....");
+        System.out.println(FanoutReceiveLogFirst.class.getName() + "等待接收消息，把接收到的消息打印到屏幕.....");
 
         DeliverCallback deliverCallback = (consumerTag, message) -> {
-            String receiveMessage = new String(message.getBody());
-            //存储到磁盘
-            File file = new File(file_path + "rabbit_mq.txt");
-            FileUtils.write(file, receiveMessage, StandardCharsets.UTF_8, true);
-            System.out.println(FanoutReceiveLogSecond.class.getName() + "接收到：" + receiveMessage);
+            System.out.println(FanoutReceiveLogFirst.class.getName() + "接收到：" + new String(message.getBody()));
         };
 
         channel.basicConsume(queue, true, deliverCallback, (message) -> {
-            System.out.println(FanoutReceiveLogSecond.class.getName() + "接收中断....");
+            System.out.println(FanoutReceiveLogFirst.class.getName() + "接收中断....");
         });
     }
 }
