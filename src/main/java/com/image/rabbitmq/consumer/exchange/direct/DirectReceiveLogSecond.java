@@ -27,6 +27,7 @@ public class DirectReceiveLogSecond {
         Channel channel = RabbitMqUtil.getChannel(false);
         channel.exchangeDeclare(exchange_name, BuiltinExchangeType.DIRECT);
         //info waring error(write) 多重绑定
+        channel.queueDeclare(queue, false, false, false, null);
         channel.queueBind(queue, exchange_name, "error");
 
         DeliverCallback deliverCallback = (tag, deliveryMessage) -> {

@@ -8,6 +8,7 @@ import java.util.Scanner;
 /**
  * Created by IntelliJ IDEA.
  * fanout producer
+ * 发布订阅模式
  *
  * @Author : 镜像
  * @create 2023/7/10 22:31
