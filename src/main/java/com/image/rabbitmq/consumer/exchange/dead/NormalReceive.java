@@ -38,6 +38,8 @@ public class NormalReceive {
         arguments.put("x-dead-letter-routing-key", "dead");
         //过期时间 毫秒 生产者指定 灵活
 //        arguments.put("x-message-ttl",10000);
+        //指定队列最大长度
+//        arguments.put("x-max-length",6);
 
         channel.queueDeclare(queue, false, false, false, arguments);
         //死信队列
@@ -49,10 +51,18 @@ public class NormalReceive {
 
         DeliverCallback deliverCallback = (tag, deliveryMessage) -> {
             String message = new String(deliveryMessage.getBody());
+            //reject
+            if (message.equals("info4")) {
+                System.out.println(NormalReceive.class.getSimpleName() + "拒收消息：" + message);
+                //标识 是否放回队列(该队列[普通队列])
+                channel.basicReject(deliveryMessage.getEnvelope().getDeliveryTag(), false);
+            }
             System.out.println(NormalReceive.class.getSimpleName() + "接收到消息：" + message);
+            channel.basicAck(deliveryMessage.getEnvelope().getDeliveryTag(), false);
         };
 
-        channel.basicConsume(queue, true, deliverCallback, (message) -> {
+        //手动应答
+        channel.basicConsume(queue, false, deliverCallback, (message) -> {
             System.out.println(NormalReceive.class.getSimpleName() + "中断接收....");
         });
     }

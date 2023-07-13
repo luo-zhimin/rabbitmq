@@ -1,7 +1,7 @@
 package com.image.rabbitmq.producer.exchange;
 
 import com.image.rabbitmq.util.RabbitMqUtil;
-import com.rabbitmq.client.AMQP;
+//import com.rabbitmq.client.AMQP;
 import com.rabbitmq.client.BuiltinExchangeType;
 import com.rabbitmq.client.Channel;
 
@@ -22,14 +22,14 @@ public class DeadProducer {
         channel.exchangeDeclare(exchange, BuiltinExchangeType.DIRECT);
 
         //死信消息
-        AMQP.BasicProperties properties = new AMQP.BasicProperties().builder()
-                //过期时间 ms
-                .expiration("10000")
-                .build();
+//        AMQP.BasicProperties properties = new AMQP.BasicProperties().builder()
+//                //过期时间 ms
+//                .expiration("10000")
+//                .build();
 
         for (int i = 0; i < 10; i++) {
             String message = "info" + i;
-            channel.basicPublish(exchange, "normal", properties, message.getBytes());
+            channel.basicPublish(exchange, "normal", null, message.getBytes());
             System.out.println(DeadProducer.class.getSimpleName() + "发送消息: " + message);
         }
     }
