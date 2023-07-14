@@ -25,9 +25,10 @@ public class TtlQueueConfig {
     //普通队列
     private static final String queue_a = "QA";
     private static final String queue_b = "QB";
+    private static final String queue_c = "QC";
+
     //死信队列
     private static final String dead_letter_queue = "QD";
-
 
     @Bean("xExchange")
     public DirectExchange xExchange() {
@@ -51,6 +52,14 @@ public class TtlQueueConfig {
         //声明普通队列
         return QueueBuilder.durable(queue_a)
                 .withArguments(arguments)
+                .build();
+    }
+
+    @Bean("queueC")
+    public Queue queueC() {
+        return QueueBuilder.durable(queue_c)
+                .deadLetterExchange(dead_letter_exchange)
+                .deadLetterRoutingKey("YD")
                 .build();
     }
 
@@ -91,6 +100,15 @@ public class TtlQueueConfig {
                 .bind(queue)
                 .to(exchange)
                 .with("XB");
+    }
+
+    @Bean
+    public Binding queueCBindingX(@Qualifier("queueC") Queue queue,
+                                  @Qualifier("xExchange") DirectExchange exchange) {
+        return BindingBuilder
+                .bind(queue)
+                .to(exchange)
+                .with("XC");
     }
 
     @Bean

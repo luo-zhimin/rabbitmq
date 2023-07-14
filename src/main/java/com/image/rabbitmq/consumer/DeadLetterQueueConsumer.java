@@ -24,6 +24,10 @@ public class DeadLetterQueueConsumer {
     @RabbitListener(queues = "QD")
     @SneakyThrows
     public void receive(Message message, Channel channel) {
+        /*
+            因为 RabbitMQ 只会检查第一个消息是否过期，如果过期则丢到死信队列，
+            如果第一个消息的延时时长很长，而第二个消息的延时时长很短，第二个消息并不会优先得到执行
+         */
         String msg = new String(message.getBody());
         log.info("当前时间:{},收到死信队列消息->{}", new Date(), msg);
     }

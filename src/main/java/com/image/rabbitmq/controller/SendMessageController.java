@@ -27,10 +27,22 @@ public class SendMessageController {
     private RabbitTemplate template;
 
     @GetMapping("/send/{message}")
-    @ApiOperation("发送消息")
+    @ApiOperation("发送消息(普通)")
     public void sendMessage(@PathVariable(value = "message") String message) {
         log.info("当前时间：{},发送一条信息给两个 TTL 队列 :{}", new Date(), message);
         template.convertAndSend("X", "XA", "消息来自ttl为10s的队列" + message);
         template.convertAndSend("X", "XB", "消息来自ttl为40s的队列" + message);
+    }
+
+    @GetMapping("/send/{message}/{ttl}")
+    @ApiOperation("发送消息(延时/普通)")
+    public void sendMessage(@PathVariable(value = "message") String message, @PathVariable String ttl) {
+        log.info("当前时间：{},发送一条时长:{}毫秒TTl信息给队列消息:{}", new Date(), ttl, message);
+
+        template.convertAndSend("X", "XC", "消息: " + message, (msg) -> {
+            //发送消息的时候 延迟时长
+            msg.getMessageProperties().setExpiration(ttl);
+            return msg;
+        });
     }
 }
