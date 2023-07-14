@@ -1,5 +1,6 @@
 package com.image.rabbitmq.controller;
 
+import com.image.rabbitmq.config.DelayedQueueConfig;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -42,6 +43,19 @@ public class SendMessageController {
         template.convertAndSend("X", "XC", "消息: " + message, (msg) -> {
             //发送消息的时候 延迟时长
             msg.getMessageProperties().setExpiration(ttl);
+            return msg;
+        });
+    }
+
+    //发送消息 基于插件 消息 延迟时间
+    @GetMapping("/delay/{message}/{delayTime}")
+    @ApiOperation("发送消息(延时基于插件-plugins)")
+    public void sendMessage(@PathVariable(value = "message") String message, @PathVariable Integer delayTime) {
+        log.info("当前时间：{},发送一条时长:{}毫秒,TTl信息给延迟队列(delayed.queue:{})", new Date(), delayTime, message);
+
+        template.convertAndSend(DelayedQueueConfig.DELAYED_EXCHANGE, DelayedQueueConfig.DELAYED_ROUTING_KEY, "消息: " + message, (msg) -> {
+            //发送消息的时候 延迟时长 ms
+            msg.getMessageProperties().setDelay(delayTime);
             return msg;
         });
     }
