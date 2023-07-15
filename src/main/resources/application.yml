@@ -4,3 +4,8 @@ spring:
     port: 5672
     username: admin
     password: 123
+    # 开启发布确认模式
+    # 默认是None 不开启
+    # SIMPLE(简单模式) 直接确认 有关闭channel的危险
+    # correlated 发布消息成功到交换器后会触发回调方法
+    publisher-confirm-type: correlated

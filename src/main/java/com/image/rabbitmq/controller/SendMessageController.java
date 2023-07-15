@@ -1,6 +1,7 @@
 package com.image.rabbitmq.controller;
 
 import com.image.rabbitmq.config.DelayedQueueConfig;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -22,6 +23,7 @@ import java.util.Date;
 @RequestMapping("ttl")
 @RestController
 @Slf4j
+@Api(tags = "生产者消息发送(死信/延时队列)")
 public class SendMessageController {
 
     @Autowired
