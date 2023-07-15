@@ -4,7 +4,7 @@ import com.image.rabbitmq.config.ConfirmConfig;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.amqp.core.ReturnedMessage;
+//import org.springframework.amqp.core.ReturnedMessage;
 import org.springframework.amqp.rabbit.connection.CorrelationData;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,17 +38,30 @@ public class ConfirmController {
         //表示发送到交换机但未成功路由到任何队列的返回消息
 //        correlationData.setReturned(new ReturnedMessage());
 
+        //三种情况 测试 2.confirms[exchange error]->backup exchange 3.queue error[backup>return]
+
         //correct
-//        template.convertAndSend(ConfirmConfig.CONFIRM_EXCHANGE,
-//                ConfirmConfig.CONFIRM_ROUTING_KEY,
-//                message,
-//                correlationData);
+        template.convertAndSend(ConfirmConfig.CONFIRM_EXCHANGE,
+                ConfirmConfig.CONFIRM_ROUTING_KEY,
+                message,
+                correlationData);
+
+        log.info("发送消息的内容:{},routingKey:{}", message, ConfirmConfig.CONFIRM_ROUTING_KEY);
 
         //test confirm callback (exchange update) but(queue update queue not receive)
         template.convertAndSend(ConfirmConfig.CONFIRM_EXCHANGE + "1",
                 ConfirmConfig.CONFIRM_ROUTING_KEY,
                 message,
                 correlationData);
-        log.info("发送消息的内容:{}", message);
+
+        log.info("发送消息的内容:{},交换机不匹配，routingKey:{}", message, ConfirmConfig.CONFIRM_ROUTING_KEY);
+
+        //routing key error
+        template.convertAndSend(ConfirmConfig.CONFIRM_EXCHANGE,
+                ConfirmConfig.CONFIRM_ROUTING_KEY + "1",
+                message,
+                correlationData);
+
+        log.info("发送消息的内容:{},routingKey:{}", message, ConfirmConfig.CONFIRM_ROUTING_KEY + "1");
     }
 }

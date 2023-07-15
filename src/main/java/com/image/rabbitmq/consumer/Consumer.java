@@ -53,4 +53,10 @@ public class Consumer {
         String msg = new String(message.getBody());
         log.info("接收到的队列confirm.queue消息：{}", msg);
     }
+
+    @RabbitListener(queues = ConfirmConfig.WARING_QUEUE)
+    public void receiveWaringMessage(Message message) {
+        String msg = new String(message.getBody());
+        log.error("报警发现不可路由消息：{}", msg);
+    }
 }
