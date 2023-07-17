@@ -35,6 +35,8 @@ public class Producer {
         Map<String, Object> arguments = new HashMap<>(1);
         //最大优先级 官方容许最大0-255 不要设置太大 浪费cpu和内存
         arguments.put("x-max-priority", 10);
+        //惰性队列 --> 直接写进磁盘里面
+//        arguments.put("x-queue-mode", "lazy");
 
         channel.queueDeclare(queue_name, true, false, false, arguments);
         //发消息 初次使用
